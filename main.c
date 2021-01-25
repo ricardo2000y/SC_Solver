@@ -42,14 +42,13 @@ int main(int argc, char *argv[]){
 	for ( i = 0; i < matriz_struct.L;i++) {
 		for ( j = 0; j < matriz_struct.C; j++) {
 			fscanf(fPointer, "%s", fileInfo);
-
 			matriz_struct.matriz[i][j] = atoi(fileInfo);
 		}
 	}
 
     fclose(fPointer);
-    //return matrix;
-   // puzzle matriz_struct = ler_ficheiro();
+   
+   
     printMatriz(matriz_struct);
     verif_zero_alone(matriz_struct);
     return 0;
