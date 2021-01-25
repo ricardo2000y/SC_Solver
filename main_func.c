@@ -1,10 +1,10 @@
 #include "main.h"
 
-puzzle ler_ficheiro() {
+/*puzzle ler_ficheiro() {
 	printf("FUNCAO LER FICHEIRO:  \n");
 	int i, j;
 	puzzle matriz_struct;
-	// ------------------- LÃŠ L, C, SL, SC--------------
+	// ------------------- LÊ L, C, SL, SC--------------
 	FILE* fPointer;
 	if ((fPointer = fopen("prob05.prb", "r")) == NULL) return;
 
@@ -28,7 +28,7 @@ puzzle ler_ficheiro() {
 	}
 
 	printf("L = %d\nC = %d\nSL= %d\nSC = %d\n", matriz_struct.L, matriz_struct.C, matriz_struct.SL, matriz_struct.SC);
-	//ciclo q mete o q lÃª no file para o array de arrays matrix[L][C]
+	//ciclo q mete o q lê no file para o array de arrays matrix[L][C]
 	for (i = 0; i < matriz_struct.L;i++) {
 		for (j = 0; j < matriz_struct.C; j++) {
 			fscanf(fPointer, "%s", fileInfo);
@@ -40,7 +40,7 @@ puzzle ler_ficheiro() {
 	fclose(fPointer);
 
 	return matriz_struct;
-}
+}*/
 
 void printMatriz(puzzle matriz_struct) {
 	int i, j;
@@ -57,17 +57,19 @@ void verif_zero_alone(puzzle matriz_struct) {
 	int i;
 	int j;
 	//ver linha a linha:
+	int zero_location;
 	int z_counter = 0;
 	int funcao_solve_zero_alone = 1;
 	//L,C = i,j
-	//na linha 0, quero avanÃ§ar de coluna a coluna Ã  procura de 0's, se n encontrar ent incrementa a linha
+	//na linha 0, quero avançar de coluna a coluna à procura de 0's, se n encontrar ent incrementa a linha
 	int tipo_de_varramento = 0;
 	for (i = 0; i < matriz_struct.L; i++, z_counter = 0) {
 		for (j = 0; j < matriz_struct.C;j++) {
 			if (matriz_struct.matriz[i][j] == 0) {
 				z_counter++;
+				zero_location = j;
 			}
-			if (j == (matriz_struct.C - 1) && z_counter == 1)solve_zero_alone(i, j - 1, matriz_struct, tipo_de_varramento);
+			if (j == (matriz_struct.C - 1) && z_counter == 1)solve_zero_alone(i, zero_location, matriz_struct, tipo_de_varramento);
 			// printf("\n%d", z_counter);
 		}
 	}//LEITURA POR LINHA REALIZADA
@@ -76,16 +78,23 @@ void verif_zero_alone(puzzle matriz_struct) {
 	tipo_de_varramento = 1;
 	for (j = 0; j < matriz_struct.C; j++, z_counter = 0) {
 		for (i = 0; i < matriz_struct.L;i++) {
-			if (matriz_struct.matriz[i][j] == 0)z_counter++;
-			//se estivermos na ultima posiÃ§Ã£o da coluna, e sÃ³ houver 1 zero, entÃ£o chamamos a funÃ§Ã£o q resolve
-			if (i == (matriz_struct.L - 1) && z_counter == 1)solve_zero_alone(i - 1, j, matriz_struct, tipo_de_varramento);
+			if (matriz_struct.matriz[i][j] == 0){
+			z_counter++;
+			zero_location = i;
+		}
+			//se estivermos na ultima posição da coluna, e só houver 1 zero, então chamamos a função q resolve
+			if (i == (matriz_struct.L - 1) && z_counter == 1)solve_zero_alone(zero_location, j, matriz_struct, tipo_de_varramento);
 		}
 	}
 
 	printf("\nLEITURA POR COLUNA REALIZADA");
 	printMatriz(matriz_struct);
-
 	
+}
+
+void aviso(char *prog){
+    fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
+    return;
 }
 
 void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento) {

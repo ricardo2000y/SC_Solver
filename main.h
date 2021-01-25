@@ -10,8 +10,10 @@ typedef struct {
 	int SL;
 	int SC;
 }puzzle;
-
-puzzle ler_ficheiro();
+puzzle matriz_struct;
+void aviso(char *);
+//puzzle ler_ficheiro();
 void printMatriz(puzzle);		
 void verif_zero_alone(puzzle);
-void solve_zero_alone();
+void solve_zero_alone(int,int,puzzle,int);
+
