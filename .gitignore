@@ -1,5 +1,6 @@
 /.idea
 /cmake-build-debug
 /probs
-*.txt
-.gitignore
+/*.txt
+/cmake-build-debug/Testing/Temporary/LastTest.txy
+/.gitignore
