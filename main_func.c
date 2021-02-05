@@ -93,6 +93,7 @@ void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento
 		//save_result(i , j , sol_coluna , *output_file);
 	}
 }
+
 void save_result(int i, int j,int total_zeros){// efetiamente ainda n�o az nada
 	output output_file[total_zeros]; // rever e pode ser feito com malloc ppbly
 	
@@ -101,10 +102,10 @@ void save_result(int i, int j,int total_zeros){// efetiamente ainda n�o az nad
 	output_file[k].L =j;
 	k++;
 /*	if (k== total_zeros){
-		organiza esta porra e imprime tamb�m existe a alternativa de guardar por ordem autom�ticamente 
+		organiza esta porra e imprime tamb�m existe a alternativa de guardar por ordem autom�ticamente
 		... ou seja usar a fun��o que corre por o file � procura de zeros para dar as coordenadas dos mesmos
 		possivelmente ut�l mas precisa de ser feito com aten��o(provavelmente elimina a necessidade da variavel q conta o total)
-		
+
 	}*/
 }
 

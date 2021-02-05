@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
 			matriz_struct.matriz[i][j] = atoi(fileInfo);
 		}
 	}
-
+    //teste
     fclose(fPointer);
    
    
