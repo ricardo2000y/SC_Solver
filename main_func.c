@@ -1,47 +1,5 @@
 #include "main.h"
 
-/*puzzle ler_ficheiro() {
-	printf("FUNCAO LER FICHEIRO:  \n");
-	int i, j;
-	puzzle matriz_struct;
-	// ------------------- LÊ L, C, SL, SC--------------
-	FILE* fPointer;
-	if ((fPointer = fopen("prob05.prb", "r")) == NULL) return;
-
-	//fPointer = fopen("prob05.prb", "r");
-	char fileInfo[150];
-	fileInfo[149] = '\0'; // -> deletes warning C6386
-			 //atoi -> The C library function int atoi(const char *str) converts the string argument str to an integer (type int).
-	fscanf(fPointer, "%s", fileInfo);
-	matriz_struct.L = atoi(fileInfo);
-	fscanf(fPointer, "%s", fileInfo);
-	matriz_struct.C = atoi(fileInfo);
-	fscanf(fPointer, "%s", fileInfo);
-	matriz_struct.SL = atoi(fileInfo);
-	fscanf(fPointer, "%s", fileInfo);
-	matriz_struct.SC = atoi(fileInfo);
-	//--------------------------------------------------
-
-	matriz_struct.matriz = (int**)malloc(sizeof(int*) * matriz_struct.L); // alocar L linhas
-	for (i = 0;i < matriz_struct.L;i++) {
-		matriz_struct.matriz[i] = (int*)malloc(sizeof(int) * matriz_struct.C); //alocar C colunas para cada linha (L)
-	}
-
-	printf("L = %d\nC = %d\nSL= %d\nSC = %d\n", matriz_struct.L, matriz_struct.C, matriz_struct.SL, matriz_struct.SC);
-	//ciclo q mete o q lê no file para o array de arrays matrix[L][C]
-	for (i = 0; i < matriz_struct.L;i++) {
-		for (j = 0; j < matriz_struct.C; j++) {
-			fscanf(fPointer, "%s", fileInfo);
-
-			matriz_struct.matriz[i][j] = atoi(fileInfo);
-		}
-	}
-
-	fclose(fPointer);
-
-	return matriz_struct;
-}*/
-
 void printMatriz(puzzle matriz_struct) {
 	int i, j;
 	printf("\n");
@@ -58,11 +16,11 @@ void verif_zero_alone(puzzle matriz_struct) {
 	int zero_location,j,i,alone_z_counter;
 	int z_counter = 0;
 	int funcao_solve_zero_alone = 1;
-	//int tipo_de_varramento = 0; -- não era necesário substitui quando chamas a solve_zero_alone
+	//int tipo_de_varramento = 0; -- nï¿½o era necesï¿½rio substitui quando chamas a solve_zero_alone
 	int lock = 0;
 	int total_zero_counter=0;
 	//L,C = i,j
-	//na linha 0, quero avançar de coluna a coluna à procura de 0's, se n encontrar ent incrementa a linha
+	//na linha 0, quero avanï¿½ar de coluna a coluna ï¿½ procura de 0's, se n encontrar ent incrementa a linha
 	do{	
 		alone_z_counter = 0;
 	 	//tipo_de_varramento = 0;
@@ -76,7 +34,7 @@ void verif_zero_alone(puzzle matriz_struct) {
 					solve_zero_alone(i, zero_location, matriz_struct, 0);
 					alone_z_counter++;
 				}
-			 	if (lock = 0)	{
+			 	if (lock == 0)	{
 			 		total_zero_counter += 	z_counter;
 				 	if(i == matriz_struct.L-1) lock = 1;
 				}
@@ -91,7 +49,7 @@ void verif_zero_alone(puzzle matriz_struct) {
 					z_counter++;
 					zero_location = i;
 				}
-				//se estivermos na ultima posição da coluna, e só houver 1 zero, então chamamos a função q resolve
+				//se estivermos na ultima posiï¿½ï¿½o da coluna, e sï¿½ houver 1 zero, entï¿½o chamamos a funï¿½ï¿½o q resolve
 				if (i == (matriz_struct.L - 1) && z_counter == 1){
 					solve_zero_alone(zero_location, j, matriz_struct, 1);
 					alone_z_counter++;
@@ -135,7 +93,7 @@ void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento
 		//save_result(i , j , sol_coluna , *output_file);
 	}
 }
-void save_result(int i, int j,int total_zeros){// efetiamente ainda não az nada
+void save_result(int i, int j,int total_zeros){// efetiamente ainda nï¿½o az nada
 	output output_file[total_zeros]; // rever e pode ser feito com malloc ppbly
 	
 	static int k=0;
@@ -143,9 +101,9 @@ void save_result(int i, int j,int total_zeros){// efetiamente ainda não az nada
 	output_file[k].L =j;
 	k++;
 /*	if (k== total_zeros){
-		organiza esta porra e imprime também existe a alternativa de guardar por ordem automáticamente 
-		... ou seja usar a função que corre por o file à procura de zeros para dar as coordenadas dos mesmos
-		possivelmente utíl mas precisa de ser feito com atenção(provavelmente elimina a necessidade da variavel q conta o total)
+		organiza esta porra e imprime tambï¿½m existe a alternativa de guardar por ordem automï¿½ticamente 
+		... ou seja usar a funï¿½ï¿½o que corre por o file ï¿½ procura de zeros para dar as coordenadas dos mesmos
+		possivelmente utï¿½l mas precisa de ser feito com atenï¿½ï¿½o(provavelmente elimina a necessidade da variavel q conta o total)
 		
 	}*/
 }
