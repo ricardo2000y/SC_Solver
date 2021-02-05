@@ -71,9 +71,9 @@ void aviso(char *prog){
 }
 
 void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento) {
-	//printf("\nsolve_zero_alone foi chamada, posicao %d %d", i,j);
-	int somaLinha = 0, somaColuna = 0, sol_linha = 0, sol_coluna = 0;
-	//printf("\nSOLVE_ZERO_ALONE CHAMADA");
+
+    int somaLinha = 0, somaColuna = 0, sol_linha = 0, sol_coluna = 0;
+	
 	int x;
 	
 	if (tipo_de_varramento == 0 /*leitura por linha*/) {
@@ -94,7 +94,7 @@ void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento
 	}
 }
 
-void save_result(int i, int j,int total_zeros){// efetiamente ainda n�o az nada
+void save_result(int i, int j,int total_zeros){// efetiamente ainda nao az nada
 	output output_file[total_zeros]; // rever e pode ser feito com malloc ppbly
 	
 	static int k=0;

@@ -11,6 +11,7 @@ typedef struct {
 	int SL;
 	int SC;
 }puzzle;
+
 typedef struct{
 	int L;
 	int C;
@@ -24,4 +25,5 @@ void printMatriz(puzzle);
 void verif_zero_alone(puzzle);
 void solve_zero_alone(int,int,puzzle,int);
 void save_result(int, int , int );
+void ler_file();
 
