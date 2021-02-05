@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/hugoo/Desktop/SC_Solver/main.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
+C:/Users/hugoo/Desktop/SC_Solver/main_func.c
+main.h
+C:/Users/hugoo/Desktop/SC_Solver/main.h
+
