@@ -1,6 +1,6 @@
 #include "main.h"
 
-void printMatriz(puzzle matriz_struct) {
+void printMatriz() {
 	int i, j;
 	printf("\n");
 	for (i = 0;i < matriz_struct.L;i++) {
@@ -12,22 +12,31 @@ void printMatriz(puzzle matriz_struct) {
 }
 
 void verif_zero_alone(puzzle matriz_struct) {
-	//ver linha a linha:
-	int zero_location,j,i,alone_z_counter;
-	int z_counter = 0;
-	int funcao_solve_zero_alone = 1;
-	int lock = 0;
-	int total_zero_counter=0;
+
+    int zero_location,j,i,alone_z_counter, z_counter=0,total_zero_counter=0,lock = 0;
+
+	//--DESCRIÇÃO DAS VARIAVEIS--
+	// zero_location: vai guardar as "coordenadas" do 0 [i][j]
+	// alone_z_counter: incrementa se existirem 0's sozinhos
+	// z_counter: serve para contar o nr de 0's de uma coluna ou linha
+
+	// total_zero_counter: NAO SEI O Q FAZ
+	// lock: NAO SEI O Q FAZ
+
 	//L,C = i,j
-	//na linha 0, quero avançar de coluna a coluna à procura de 0's, se n encontrar ent incrementa a linha
+
+
+
+
+    //na linha 0, quero avançar de coluna a coluna à procura de 0's, se n encontrar ent incrementa a linha
 	do{	
 		alone_z_counter = 0;
-	 	//a correr por coluna
+	 	//a correr a linha
 		for (i = 0; i < matriz_struct.L; i++, z_counter = 0) {
 			for (j = 0; j < matriz_struct.C;j++) {
-				if (matriz_struct.matriz[i][j] == 0) { //se igual a 0 incrementa
-					z_counter++;
-					zero_location = j; //j = index da coluna
+				if (matriz_struct.matriz[i][j] == 0) {
+					z_counter++;        //se X na posição [i][j]=0 incrementa
+					zero_location = j;  //posição do 0 => [i][zero_location]
 				}
 				if (j == (matriz_struct.C - 1) && z_counter == 1){//se chegar ao fim da linha e existir apenas um 0
                                                                   //chama a função q resolve o 0 sozinho
@@ -39,17 +48,18 @@ void verif_zero_alone(puzzle matriz_struct) {
 				 	if(i == matriz_struct.L-1) lock = 1;
 				}
 			}
-		}//LEITURA POR LINHA REALIZADA
-		printf("\nLEITURA POR LINHA REALIZADA");
-		printMatriz(matriz_struct);
 
-		for (j = 0; j < matriz_struct.C; j++, z_counter = 0) {
+		}//LEITURA POR LINHA REALIZADA
+		//printf("\nLEITURA POR LINHA REALIZADA");
+		//printMatriz(matriz_struct);
+
+		for (j = 0; j < matriz_struct.C; j++, z_counter = 0) { //correr por coluna
 			for (i = 0; i < matriz_struct.L;i++) {
-				if (matriz_struct.matriz[i][j] == 0){
+				if (matriz_struct.matriz[i][j] == 0){   //se igual a 0 incrementa
 					z_counter++;
 					zero_location = i;
 				}
-				//se estivermos na ultima posi��o da coluna, e s� houver 1 zero, ent�o chamamos a fun��o q resolve
+				//se estivermos na ultima posicao da coluna, e so houver 1 zero, entao chamamos a funcao q resolve
 				if (i == (matriz_struct.L - 1) && z_counter == 1){
 					solve_zero_alone(zero_location, j, matriz_struct, 1);
 					alone_z_counter++;
@@ -58,23 +68,16 @@ void verif_zero_alone(puzzle matriz_struct) {
 			}
 	}
 
-	printf("\nLEITURA POR COLUNA REALIZADA");
-	printMatriz(matriz_struct);
+	//printf("\nLEITURA POR COLUNA REALIZADA");
+	//printMatriz(matriz_struct);
 	} while (alone_z_counter!=0 );
 
 }
 
-
-void aviso(char *prog){
-    fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
-    return;
-}
-
 void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento) {
 
-    int somaLinha = 0, somaColuna = 0, sol_linha = 0, sol_coluna = 0;
+    int somaLinha = 0, somaColuna = 0, sol_linha = 0, sol_coluna = 0,x;
 
-	int x;
 	
 	if (tipo_de_varramento == 0 /*leitura por linha*/) {
 		for (x = 0; x < matriz_struct.C; x++) {
@@ -82,30 +85,54 @@ void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento
 		}
 		sol_linha = matriz_struct.SL - somaLinha;
 		matriz_struct.matriz[i][j] = sol_linha;
-		//save_result(i , j , sol_linha , *output_file);
+		save_result(i , j , sol_linha);
+
 	}
-	else if (tipo_de_varramento) {
+	else if (tipo_de_varramento == 1 /*leitura por coluna*/) {
 		for (x = 0; x < matriz_struct.L; x++) {
 			somaColuna = somaColuna + matriz_struct.matriz[x][j];
 		}
 		sol_coluna = matriz_struct.SC - somaColuna;
 		matriz_struct.matriz[i][j] = sol_coluna;
-		//save_result(i , j , sol_coluna , *output_file);
+        save_result(i , j , sol_coluna);
+
 	}
 }
 
-void save_result(int i, int j,int total_zeros){// efetiamente ainda nao az nada
-	output output_file[total_zeros]; // rever e pode ser feito com malloc ppbly
-	
-	static int k=0;
-	output_file[k].C =i;
-	output_file[k].L =j;
-	k++;
-/*	if (k== total_zeros){
-		organiza esta porra e imprime tamb�m existe a alternativa de guardar por ordem autom�ticamente
-		... ou seja usar a fun��o que corre por o file � procura de zeros para dar as coordenadas dos mesmos
-		possivelmente ut�l mas precisa de ser feito com aten��o(provavelmente elimina a necessidade da variavel q conta o total)
 
-	}*/
+
+void save_result(int L, int C, int sol){
+    static int times_called = 0;
+   // printf("\nSave Chamado, times called = %d, L= %d, C= %d, sol= %d", times_called+1, L,C, sol);
+    solucao.matriz_sol[times_called][0]=L+1;
+    solucao.matriz_sol[times_called][1]=C+1;
+    solucao.matriz_sol[times_called][2]=sol;
+    //printf("\nsolucao.matriz_sol[times_called][0]=%d\nsolucao.matriz_sol[times_called][1]=%d\nsolucao.matriz_sol[times_called][2]=%d",solucao.matriz_sol[times_called][0],solucao.matriz_sol[times_called][1],solucao.matriz_sol[times_called][2]);
+    times_called++;
+    solucao.zero_solved++;
+
+}
+
+void printSol(output solucao,puzzle matriz_struct) {
+    int i, j, print_until;
+    printf("\n");
+    if (solucao.zero_solved != matriz_struct.total_zeros){
+        print_until = solucao.zero_solved;
+        printf("\nSolucao incompleta, ainda há zeros por resolver. Foram resolvidos %d zeros.\n", solucao.zero_solved);
+    }else{
+        print_until= matriz_struct.total_zeros;
+        printf("\nTodos os zeros encontrados.SOLUCAO:\n");
+    }
+
+    for (i = 0;i < print_until;i++) {
+        for (j = 0;j < 3;j++) {
+            printf("%d\t", solucao.matriz_sol[i][j]);
+        }
+        printf("\n");
+    }
+}
+void aviso(char *prog){
+    fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
+    return;
 }
 

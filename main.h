@@ -3,27 +3,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//teste
+
 typedef struct {
 	int ** matriz;
 	int L;
 	int C;
 	int SL;
 	int SC;
+	int total_zeros;
 }puzzle;
 
 typedef struct{
-	int L;
+	int **matriz_sol;
+    int L;
 	int C;
-	//int value;
+	int result;
+	int zero_solved;
 }output;
 
 puzzle matriz_struct;
+output solucao;
+void printSol(output, puzzle);
 void aviso(char *);
-//puzzle ler_ficheiro();
-void printMatriz(puzzle);		
+void printMatriz();
 void verif_zero_alone(puzzle);
 void solve_zero_alone(int,int,puzzle,int);
 void save_result(int, int , int );
 void ler_file(int, char*);
+
 
