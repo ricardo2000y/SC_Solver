@@ -1,7 +1,6 @@
 #include "main.h"
 
 int main(int argc, char *argv[]){
-    int i,j, **matrix, total_zero_counter =0;
 
     if (argc < 2) {
         aviso(argv[0]);
