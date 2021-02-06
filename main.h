@@ -29,6 +29,7 @@ void printMatriz();
 void verif_zero_alone(puzzle);
 void solve_zero_alone(int,int,puzzle,int);
 void save_result(int, int , int );
-void ler_file(int, char*);
+void ler_ficheiro(char*);
+void setup_solucao();
 
 

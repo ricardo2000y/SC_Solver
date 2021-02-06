@@ -1,5 +1,58 @@
 #include "main.h"
 
+void ler_ficheiro(char *prog){
+    FILE *fPointer;
+    int i,j, **matrix, total_zero_counter =0;
+
+    /* open file and read array size */
+    fPointer = (FILE *) fopen(prog, "r");
+    if (fPointer == (FILE *) NULL) {
+        fprintf(stderr, "O ficheiro %s nao pode ser lido ou nao existe.  Tente novamente.\n", prog);
+        exit(0);
+    }
+    char fileInfo[150];
+
+    //atoi -> The C library function int atoi(const char *str) converts the string argument str to an integer (type int).
+    fscanf(fPointer, "%s", fileInfo);
+    matriz_struct.L  = atoi(fileInfo);
+    fscanf(fPointer, "%s", fileInfo);
+    matriz_struct.C = atoi(fileInfo);
+    fscanf(fPointer, "%s", fileInfo);
+    matriz_struct.SL = atoi(fileInfo);
+    fscanf(fPointer, "%s", fileInfo);
+    matriz_struct.SC = atoi(fileInfo);
+    matriz_struct.matriz = (int**)malloc(sizeof(int*) * matriz_struct.L); // alocar L linhas
+    for (i = 0;i < matriz_struct.L;i++) {
+        matriz_struct.matriz[i] = (int*)malloc(sizeof(int) * matriz_struct.C); //alocar C colunas para cada linha (L)
+    }
+
+    printf("L = %d\nC = %d\nSL= %d\nSC = %d\n", matriz_struct.L, matriz_struct.C, matriz_struct.SL, matriz_struct.SC);
+    for ( i = 0; i < matriz_struct.L;i++) {
+        for ( j = 0; j < matriz_struct.C; j++) {
+            fscanf(fPointer, "%s", fileInfo);
+            matriz_struct.matriz[i][j] = atoi(fileInfo);
+        }
+    }
+
+    fclose(fPointer);
+}
+
+void setup_solucao(){
+    int total_zero_counter=0, i,j;
+        for (i = 0; i < matriz_struct.L; i++) {
+            for (j = 0; j < matriz_struct.C;j++) {
+                if(matriz_struct.matriz[i][j]==0) total_zero_counter++;
+            }
+        }
+        matriz_struct.total_zeros=total_zero_counter;
+        //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUÇÃO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
+        int ** matriz_sol;
+        solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
+        for (i = 0;i < matriz_struct.total_zeros;i++) {
+            solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
+        }
+}
+
 void printMatriz() {
 	int i, j;
 	printf("\n");
@@ -99,8 +152,6 @@ void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento
 	}
 }
 
-
-
 void save_result(int L, int C, int sol){
     static int times_called = 0;
    // printf("\nSave Chamado, times called = %d, L= %d, C= %d, sol= %d", times_called+1, L,C, sol);
@@ -118,7 +169,7 @@ void printSol(output solucao,puzzle matriz_struct) {
     printf("\n");
     if (solucao.zero_solved != matriz_struct.total_zeros){
         print_until = solucao.zero_solved;
-        printf("\nSolucao incompleta, ainda há zeros por resolver. Foram resolvidos %d zeros.\n", solucao.zero_solved);
+        printf("\nSolucao incompleta, ainda há zeros por resolver. Foram resolvidos %d zeros de %d.\n", solucao.zero_solved, matriz_struct.total_zeros);
     }else{
         print_until= matriz_struct.total_zeros;
         printf("\nTodos os zeros encontrados.SOLUCAO:\n");
@@ -131,6 +182,7 @@ void printSol(output solucao,puzzle matriz_struct) {
         printf("\n");
     }
 }
+
 void aviso(char *prog){
     fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
     return;
