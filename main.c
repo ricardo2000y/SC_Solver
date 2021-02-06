@@ -14,11 +14,12 @@ int main(int argc, char *argv[]){
 
     printMatriz();
 
-    verif_zero_alone(matriz_struct);
+    verif_zero_alone();
 
-    printSol(solucao, matriz_struct);
+    printSol();
 
+    //funcao da arvore troço q vai resolver os outros 0's :D();
+    //sort_sol();
     //guardar_file_sol();
-
     return 0;
 }

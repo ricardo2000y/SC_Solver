@@ -34,21 +34,20 @@ void ler_ficheiro(char *prog){
         }
     }
 
+    for (i = 0; i < matriz_struct.L; i++) {
+        for (j = 0; j < matriz_struct.C;j++) {
+            if(matriz_struct.matriz[i][j]==0) total_zero_counter++;
+        }
+    }
+    matriz_struct.total_zeros=total_zero_counter;
+
     fclose(fPointer);
 }
 
 void setup_solucao(){
-    int total_zero_counter=0, i,j;
-        for (i = 0; i < matriz_struct.L; i++) {
-            for (j = 0; j < matriz_struct.C;j++) {
-                if(matriz_struct.matriz[i][j]==0) total_zero_counter++;
-            }
-        }
-        matriz_struct.total_zeros=total_zero_counter;
         //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUÇÃO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
-        int ** matriz_sol;
         solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
-        for (i = 0;i < matriz_struct.total_zeros;i++) {
+        for (int i = 0;i < matriz_struct.total_zeros;i++) {
             solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
         }
 }
@@ -64,22 +63,14 @@ void printMatriz() {
 	}
 }
 
-void verif_zero_alone(puzzle matriz_struct) {
+void verif_zero_alone() {
 
     int zero_location,j,i,alone_z_counter, z_counter=0,total_zero_counter=0,lock = 0;
-
 	//--DESCRIÇÃO DAS VARIAVEIS--
 	// zero_location: vai guardar as "coordenadas" do 0 [i][j]
 	// alone_z_counter: incrementa se existirem 0's sozinhos
 	// z_counter: serve para contar o nr de 0's de uma coluna ou linha
-
-	// total_zero_counter: NAO SEI O Q FAZ
-	// lock: NAO SEI O Q FAZ
-
 	//L,C = i,j
-
-
-
 
     //na linha 0, quero avançar de coluna a coluna à procura de 0's, se n encontrar ent incrementa a linha
 	do{	
@@ -93,7 +84,7 @@ void verif_zero_alone(puzzle matriz_struct) {
 				}
 				if (j == (matriz_struct.C - 1) && z_counter == 1){//se chegar ao fim da linha e existir apenas um 0
                                                                   //chama a função q resolve o 0 sozinho
-					solve_zero_alone(i, zero_location, matriz_struct, 0);
+					solve_zero_alone(i, zero_location,0);
 					alone_z_counter++;
 				}
 			 	if (lock == 0)	{
@@ -101,11 +92,8 @@ void verif_zero_alone(puzzle matriz_struct) {
 				 	if(i == matriz_struct.L-1) lock = 1;
 				}
 			}
-
-		}//LEITURA POR LINHA REALIZADA
-		//printf("\nLEITURA POR LINHA REALIZADA");
-		//printMatriz(matriz_struct);
-
+		}
+		//a correr a coluna
 		for (j = 0; j < matriz_struct.C; j++, z_counter = 0) { //correr por coluna
 			for (i = 0; i < matriz_struct.L;i++) {
 				if (matriz_struct.matriz[i][j] == 0){   //se igual a 0 incrementa
@@ -114,20 +102,15 @@ void verif_zero_alone(puzzle matriz_struct) {
 				}
 				//se estivermos na ultima posicao da coluna, e so houver 1 zero, entao chamamos a funcao q resolve
 				if (i == (matriz_struct.L - 1) && z_counter == 1){
-					solve_zero_alone(zero_location, j, matriz_struct, 1);
+					solve_zero_alone(zero_location, j, 1);
 					alone_z_counter++;
-				
 				}
 			}
 	}
-
-	//printf("\nLEITURA POR COLUNA REALIZADA");
-	//printMatriz(matriz_struct);
 	} while (alone_z_counter!=0 );
-
 }
 
-void solve_zero_alone(int i, int j, puzzle matriz_struct, int tipo_de_varramento) {
+void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 
     int somaLinha = 0, somaColuna = 0, sol_linha = 0, sol_coluna = 0,x;
 
@@ -164,7 +147,7 @@ void save_result(int L, int C, int sol){
 
 }
 
-void printSol(output solucao,puzzle matriz_struct) {
+void printSol() {
     int i, j, print_until;
     printf("\n");
     if (solucao.zero_solved != matriz_struct.total_zeros){

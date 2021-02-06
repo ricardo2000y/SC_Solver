@@ -23,13 +23,37 @@ typedef struct{
 
 puzzle matriz_struct;
 output solucao;
-void printSol(output, puzzle);
-void aviso(char *);
-void printMatriz();
-void verif_zero_alone(puzzle);
-void solve_zero_alone(int,int,puzzle,int);
-void save_result(int, int , int );
+
 void ler_ficheiro(char*);
+    /* abre ficheiro .prb
+     * guarda as informações necessárias ao programa na estrutura puzzle matriz_strcut
+        * L, C, SL, SC, zeros totais guardados
+     * aloca memoria para a matriz lida segundo as suas linhas e colunas
+        * matriz é guardada
+     * fecha file.*/
+void aviso(char *);
 void setup_solucao();
+    /*Aloca memoria para uma matriz onde vao ser guardadas
+     as solucoes, segundo o numero de zeros totais da matriz problema*/
+
+void printMatriz(); //self-explanatory
+
+void printSol();
+    /* imprime as solucoes que já tem resolvidas
+     * se nao tiver TODAS as solucoes resolvidas informa o utilizador*/
+
+void verif_zero_alone();
+    /*conta os zeros por linha
+        * se existirem 0's sozinhos -> resolve
+     *conta os zeros por coluna
+        * se existirem 0's sozinhos -> resolve
+    */
+void solve_zero_alone(int,int,int);
+    /*soma as linhas/colunas para e subrai a SL/SC para encontrar o 0*/
+void save_result(int, int , int );
+    /*chamada pela solve_zero_alone para armazenar a coordenada do 0
+     encontrado e da solução do respetivo 0*/
+
+
 
 
