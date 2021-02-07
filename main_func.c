@@ -45,11 +45,24 @@ void ler_ficheiro(char *prog){
 }
 
 void setup_solucao(){
+    int x = 0, i, j;
         //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUÇÃO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
         solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
-        for (int i = 0;i < matriz_struct.total_zeros;i++) {
+        for (i = 0;i < matriz_struct.total_zeros;i++) {
             solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
         }
+
+    for (i = 0;i < matriz_struct.L;i++) {
+        for (j = 0;j < matriz_struct.C;j++) {
+            if(matriz_struct.matriz[i][j] == 0){
+                solucao.matriz_sol[x][0] = i+1;
+                solucao.matriz_sol[x][1] = j+1;
+                solucao.matriz_sol[x][2] = 0;
+                x++;
+            }
+        }
+    }
+
 }
 
 void printMatriz() {
@@ -136,28 +149,15 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 }
 
 void save_result(int L, int C, int sol){
-    static int times_called = 0;
-   // printf("\nSave Chamado, times called = %d, L= %d, C= %d, sol= %d", times_called+1, L,C, sol);
-    solucao.matriz_sol[times_called][0]=L+1;
-    solucao.matriz_sol[times_called][1]=C+1;
-    solucao.matriz_sol[times_called][2]=sol;
-    //printf("\nsolucao.matriz_sol[times_called][0]=%d\nsolucao.matriz_sol[times_called][1]=%d\nsolucao.matriz_sol[times_called][2]=%d",solucao.matriz_sol[times_called][0],solucao.matriz_sol[times_called][1],solucao.matriz_sol[times_called][2]);
-    times_called++;
-    solucao.zero_solved++;
-
+   for (int i=0; i<matriz_struct.total_zeros; i++){
+       if(solucao.matriz_sol[i][0]==L+1 && solucao.matriz_sol[i][1] == C+1) solucao.matriz_sol[i][2]=sol;
+   }
 }
 
 void printSol() {
     int i, j, print_until;
     printf("\n");
-    if (solucao.zero_solved != matriz_struct.total_zeros){
-        print_until = solucao.zero_solved;
-        printf("\nSolucao incompleta, ainda há zeros por resolver. Foram resolvidos %d zeros de %d.\n", solucao.zero_solved, matriz_struct.total_zeros);
-    }else{
-        print_until= matriz_struct.total_zeros;
-        printf("\nTodos os zeros encontrados.SOLUCAO:\n");
-    }
-
+    print_until= matriz_struct.total_zeros;
     for (i = 0;i < print_until;i++) {
         for (j = 0;j < 3;j++) {
             printf("%d\t", solucao.matriz_sol[i][j]);
@@ -170,4 +170,80 @@ void aviso(char *prog){
     fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
     return;
 }
+/*//----------------------------------------------------------------------------------------------------
+int valid(int[][9], int, int, int);
+int solve(int[][9]);
+int find_empty_cell(int[][9], int *, int *);
 
+int main() {
+    int puzzle[9][9] = {{1, 7, 4, 0, 9, 0, 6, 0, 0},
+                        {0, 0, 0, 0, 3, 8, 1, 5, 7},
+                        {5, 3, 0, 7, 0, 1, 0, 0, 4},
+                        {0, 0, 7, 3, 4, 9, 8, 0, 0},
+                        {8, 4, 0, 5, 0, 0, 3, 6, 0},
+                        {3, 0, 5, 0, 0, 6, 4, 7, 0},
+                        {2, 8, 6, 9, 0, 0, 0, 0, 1},
+                        {0, 0, 0, 6, 2, 7, 0, 3, 8},
+                        {0, 5, 3, 0, 8, 0, 0, 9, 6}};
+    int row = 0;
+    int column = 0;
+
+    if (solve(puzzle)) {
+        printf("\n+-----+-----+-----+\n");
+        for (int x = 0; x < 9; ++x) {
+            for (int y = 0; y < 9; ++y) printf("|%d", puzzle[x][y]);
+            printf("|\n");
+            if (x % 3 == 2) printf("\n+-----+-----+-----+\n");
+        }
+    }
+    else {
+        printf("\n\nNO SOLUTION FOUND\n\n");
+    }
+
+    return 0;
+}
+int valid(){
+
+}
+
+int solve_zero() {
+    // L,C vem das matriz das solucoes
+    int L,C, max_gap;
+    // condicao que verifica se ja estamos na ultima posicao e
+    // somas constantes estão verificadas
+
+    max_gap = find_gap_value(L,C);
+
+    for (int guess = 1; guess <= max_gap ; guess++) {
+        matriz_struct.matriz[L][C] = guess;
+        // ? verif zero alone
+        if(solve_zero(puzzle) && valid()) {
+
+            return 1;
+        }
+        puzzle[L][C] = 0;
+
+    }
+    return 0;
+}
+//----------------------------------------------------------------------------------------------------*/
+
+
+int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
+    int x, somaLinha = -1, somaColuna = -1; // -1 para não ser contado o 0 que estamos a resolver
+
+    for (x = 0; x < matriz_struct.C; x++) {
+        if (matriz_struct.matriz[L][x]==0) somaLinha++; //por cada 0 que encontra incrementa somaLinha por 1
+                                                        //pq o valor minimo de qualquer 0 (pos resolucao) é 1
+        somaLinha += matriz_struct.matriz[L][x];
+    }
+    for (x = 0; x < matriz_struct.L; x++) {
+        if (matriz_struct.matriz[x][C]==0) somaColuna++;
+        somaColuna += matriz_struct.matriz[x][C];
+    }
+
+    somaLinha = matriz_struct.SL - somaLinha;
+    somaColuna = matriz_struct.SC - somaColuna;
+    if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores máximos linha/coluna
+    else return somaColuna;
+}

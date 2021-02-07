@@ -51,9 +51,8 @@ void verif_zero_alone();
 void solve_zero_alone(int,int,int);
     /*soma as linhas/colunas para e subrai a SL/SC para encontrar o 0*/
 void save_result(int, int , int );
-    /*chamada pela solve_zero_alone para armazenar a coordenada do 0
-     encontrado e da solução do respetivo 0*/
+    /*le a matriz da solução para encontrar a coordenada do zero e guardar o resultado no respetivo sitio*/
 
-
+int find_gap_value(int, int);
 
 
