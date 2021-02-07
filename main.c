@@ -1,3 +1,4 @@
+
 #include "main.h"
 
 int main(int argc, char *argv[]){
@@ -17,7 +18,7 @@ int main(int argc, char *argv[]){
 
     printSol();
 
-    //funcao da arvore troÃ§o q vai resolver os outros 0's :D();
+    //funcao da arvore troço q vai resolver os outros 0's :D();
     //sort_sol();
     //guardar_file_sol();
     return 0;

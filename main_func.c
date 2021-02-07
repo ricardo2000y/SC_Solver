@@ -46,7 +46,7 @@ void ler_ficheiro(char *prog){
 
 void setup_solucao(){
     int x = 0, i, j;
-        //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLU√á√ÉO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
+        //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLU«√O - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
         solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
         for (i = 0;i < matriz_struct.total_zeros;i++) {
             solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
@@ -79,24 +79,24 @@ void printMatriz() {
 void verif_zero_alone() {
 
     int zero_location,j,i,alone_z_counter, z_counter=0,total_zero_counter=0,lock = 0;
-	//--DESCRI√á√ÉO DAS VARIAVEIS--
+	//--DESCRI«√O DAS VARIAVEIS--
 	// zero_location: vai guardar as "coordenadas" do 0 [i][j]
 	// alone_z_counter: incrementa se existirem 0's sozinhos
 	// z_counter: serve para contar o nr de 0's de uma coluna ou linha
 	//L,C = i,j
 
-    //na linha 0, quero avan√ßar de coluna a coluna √† procura de 0's, se n encontrar ent incrementa a linha
+    //na linha 0, quero avanÁar de coluna a coluna ‡ procura de 0's, se n encontrar ent incrementa a linha
 	do{	
 		alone_z_counter = 0;
 	 	//a correr a linha
 		for (i = 0; i < matriz_struct.L; i++, z_counter = 0) {
 			for (j = 0; j < matriz_struct.C;j++) {
 				if (matriz_struct.matriz[i][j] == 0) {
-					z_counter++;        //se X na posi√ß√£o [i][j]=0 incrementa
-					zero_location = j;  //posi√ß√£o do 0 => [i][zero_location]
+					z_counter++;        //se X na posiÁ„o [i][j]=0 incrementa
+					zero_location = j;  //posiÁ„o do 0 => [i][zero_location]
 				}
 				if (j == (matriz_struct.C - 1) && z_counter == 1){//se chegar ao fim da linha e existir apenas um 0
-                                                                  //chama a fun√ß√£o q resolve o 0 sozinho
+                                                                  //chama a funÁ„o q resolve o 0 sozinho
 					solve_zero_alone(i, zero_location,0);
 					alone_z_counter++;
 				}
@@ -149,7 +149,8 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 }
 
 void save_result(int L, int C, int sol){
-   for (int i=0; i<matriz_struct.total_zeros; i++){
+   int i;
+   for ( i=0; i < matriz_struct.total_zeros; i++){
        if(solucao.matriz_sol[i][0]==L+1 && solucao.matriz_sol[i][1] == C+1) solucao.matriz_sol[i][2]=sol;
    }
 }
@@ -174,7 +175,6 @@ void aviso(char *prog){
 int valid(int[][9], int, int, int);
 int solve(int[][9]);
 int find_empty_cell(int[][9], int *, int *);
-
 int main() {
     int puzzle[9][9] = {{1, 7, 4, 0, 9, 0, 6, 0, 0},
                         {0, 0, 0, 0, 3, 8, 1, 5, 7},
@@ -187,7 +187,6 @@ int main() {
                         {0, 5, 3, 0, 8, 0, 0, 9, 6}};
     int row = 0;
     int column = 0;
-
     if (solve(puzzle)) {
         printf("\n+-----+-----+-----+\n");
         for (int x = 0; x < 9; ++x) {
@@ -199,42 +198,89 @@ int main() {
     else {
         printf("\n\nNO SOLUTION FOUND\n\n");
     }
-
     return 0;
 }
 int valid(){
-
 }
-
 int solve_zero() {
     // L,C vem das matriz das solucoes
     int L,C, max_gap;
     // condicao que verifica se ja estamos na ultima posicao e
-    // somas constantes est√£o verificadas
-
+    // somas constantes est„o verificadas
     max_gap = find_gap_value(L,C);
-
     for (int guess = 1; guess <= max_gap ; guess++) {
         matriz_struct.matriz[L][C] = guess;
         // ? verif zero alone
         if(solve_zero(puzzle) && valid()) {
-
             return 1;
         }
         puzzle[L][C] = 0;
-
     }
     return 0;
 }
 //----------------------------------------------------------------------------------------------------*/
 
 
+int solve_zero() {
+    // L,C vem das matriz das solucoes
+    int L,C, max_gap,x,guess,check_soma_linha = 0 ,check_soma_coluna = 0;
+    // condicao que verifica se ja estamos na ultima posicao e
+    // somas constantes est„o verificadas
+    if (x = matriz_struct.total_zeros -1){
+    	//testar se a condiÁ„o somas constantes se mantÍm 
+    	for (L = 0 ; L < matriz_struct.L ; L++){
+			for (C = 0 ; C < matriz_struct.C; C++){
+				check_soma_linha += matriz_struct.matriz[L][C] ;
+				
+				}
+		}
+		for (C = 0 ; C < matriz_struct.C ; C++){
+			for (L = 0 ; L < matriz_struct.L; L++){
+				check_soma_coluna  += matriz_struct.matriz[L][C] ;
+				
+				}
+		}
+		if(check_soma_linha== matriz_struct.SL &&check_soma_coluna == matriz_struct.SC ) return 1;
+		return 0;
+	}
+
+	for (x = 0; x <  matriz_struct.total_zeros;x++){
+
+		if (solucao.matriz_sol[x][2] == 0){
+			L = solucao.matriz_sol[x][0];
+			C = solucao.matriz_sol[x][1];
+			max_gap = find_gap_value(L,C);
+		    for  (guess = 1; guess <= max_gap ; guess++) {
+		        matriz_struct.matriz[L][C] = guess;
+		        solucao.matriz_sol[x][2] = guess;
+		        // ? verif zero alone
+		        if(solve_zero(matriz_struct.matriz[L][C]) && valid()) {
+		            return 1;
+		        }
+		    	matriz_struct.matriz[L][C] = 0;
+		    	solucao.matriz_sol[x][2] = 0;
+		    }
+		}
+	}
+    
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
 int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
-    int x, somaLinha = -1, somaColuna = -1; // -1 para n√£o ser contado o 0 que estamos a resolver
+    int x, somaLinha = -1, somaColuna = -1; // -1 para n„o ser contado o 0 que estamos a resolver
 
     for (x = 0; x < matriz_struct.C; x++) {
         if (matriz_struct.matriz[L][x]==0) somaLinha++; //por cada 0 que encontra incrementa somaLinha por 1
-                                                        //pq o valor minimo de qualquer 0 (pos resolucao) √© 1
+                                                        //pq o valor minimo de qualquer 0 (pos resolucao) È 1
         somaLinha += matriz_struct.matriz[L][x];
     }
     for (x = 0; x < matriz_struct.L; x++) {
@@ -244,6 +290,6 @@ int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
 
     somaLinha = matriz_struct.SL - somaLinha;
     somaColuna = matriz_struct.SC - somaColuna;
-    if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores m√°ximos linha/coluna
+    if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores m·ximos linha/coluna
     else return somaColuna;
 }
