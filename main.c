@@ -15,9 +15,13 @@ int main(int argc, char *argv[]){
     printMatriz();
 
     verif_zero_alone();
+    
+	solve_zero();
+	
+	update_sol();
 
-    printSol();
-
+	printSol();
+ 
     //funcao da arvore troço q vai resolver os outros 0's :D();
     //sort_sol();
     //guardar_file_sol();

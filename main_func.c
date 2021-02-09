@@ -78,7 +78,7 @@ void printMatriz() {
 
 void verif_zero_alone() {
 
-    int zero_location,j,i,alone_z_counter, z_counter=0,total_zero_counter=0,lock = 0;
+    int zero_location,j,i,alone_z_counter, z_counter=0,total_zero_counter=0;
 	//--DESCRIÇÃO DAS VARIAVEIS--
 	// zero_location: vai guardar as "coordenadas" do 0 [i][j]
 	// alone_z_counter: incrementa se existirem 0's sozinhos
@@ -99,10 +99,6 @@ void verif_zero_alone() {
                                                                   //chama a função q resolve o 0 sozinho
 					solve_zero_alone(i, zero_location,0);
 					alone_z_counter++;
-				}
-			 	if (lock == 0)	{
-			 		total_zero_counter += 	z_counter;
-				 	if(i == matriz_struct.L-1) lock = 1;
 				}
 			}
 		}
@@ -171,109 +167,73 @@ void aviso(char *prog){
     fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
     return;
 }
-/*//----------------------------------------------------------------------------------------------------
-int valid(int[][9], int, int, int);
-int solve(int[][9]);
-int find_empty_cell(int[][9], int *, int *);
-int main() {
-    int puzzle[9][9] = {{1, 7, 4, 0, 9, 0, 6, 0, 0},
-                        {0, 0, 0, 0, 3, 8, 1, 5, 7},
-                        {5, 3, 0, 7, 0, 1, 0, 0, 4},
-                        {0, 0, 7, 3, 4, 9, 8, 0, 0},
-                        {8, 4, 0, 5, 0, 0, 3, 6, 0},
-                        {3, 0, 5, 0, 0, 6, 4, 7, 0},
-                        {2, 8, 6, 9, 0, 0, 0, 0, 1},
-                        {0, 0, 0, 6, 2, 7, 0, 3, 8},
-                        {0, 5, 3, 0, 8, 0, 0, 9, 6}};
-    int row = 0;
-    int column = 0;
-    if (solve(puzzle)) {
-        printf("\n+-----+-----+-----+\n");
-        for (int x = 0; x < 9; ++x) {
-            for (int y = 0; y < 9; ++y) printf("|%d", puzzle[x][y]);
-            printf("|\n");
-            if (x % 3 == 2) printf("\n+-----+-----+-----+\n");
-        }
-    }
-    else {
-        printf("\n\nNO SOLUTION FOUND\n\n");
-    }
-    return 0;
-}
-int valid(){
-}
-int solve_zero() {
-    // L,C vem das matriz das solucoes
-    int L,C, max_gap;
-    // condicao que verifica se ja estamos na ultima posicao e
-    // somas constantes estão verificadas
-    max_gap = find_gap_value(L,C);
-    for (int guess = 1; guess <= max_gap ; guess++) {
-        matriz_struct.matriz[L][C] = guess;
-        // ? verif zero alone
-        if(solve_zero(puzzle) && valid()) {
-            return 1;
-        }
-        puzzle[L][C] = 0;
-    }
-    return 0;
-}
-//----------------------------------------------------------------------------------------------------*/
 
+int find_next_zero(int* L , int* C){
+	int i,j;	
+	for (i = 0; i < matriz_struct.L; i++) {
+			for (j = 0; j < matriz_struct.C;j++) {
+				if (matriz_struct.matriz[i][j] == 0){
+					*L = i;
+					*C = j;
+					return 1;
+					} 
+				}
+			}
+	return 0;
+}
+
+int check_valid(){
+	int L,C,check_soma_linha = 0 ,check_soma_coluna = 0;
+	for (L = 0 ; L < matriz_struct.L ; L++){
+		for (C = 0 ; C < matriz_struct.C; C++){
+			check_soma_linha += matriz_struct.matriz[L][C] ;
+			}
+			if(check_soma_linha != matriz_struct.SL) return 0;	
+		}
+	for (C = 0 ; C < matriz_struct.C ; C++){
+		for (L = 0 ; L < matriz_struct.L; L++){
+			check_soma_coluna  += matriz_struct.matriz[L][C] ;	
+			}
+		if(check_soma_coluna != matriz_struct.SC) return 0;
+		}
+	return 1;
+}
 
 int solve_zero() {
     // L,C vem das matriz das solucoes
-    int L,C, max_gap,x,guess,check_soma_linha = 0 ,check_soma_coluna = 0;
+    int L,C, max_gap,x,guess;
     // condicao que verifica se ja estamos na ultima posicao e
     // somas constantes estão verificadas
-    if (x = matriz_struct.total_zeros -1){
-    	//testar se a condição somas constantes se mantêm 
-    	for (L = 0 ; L < matriz_struct.L ; L++){
-			for (C = 0 ; C < matriz_struct.C; C++){
-				check_soma_linha += matriz_struct.matriz[L][C] ;
-				
-				}
-		}
-		for (C = 0 ; C < matriz_struct.C ; C++){
-			for (L = 0 ; L < matriz_struct.L; L++){
-				check_soma_coluna  += matriz_struct.matriz[L][C] ;
-				
-				}
-		}
-		if(check_soma_linha== matriz_struct.SL &&check_soma_coluna == matriz_struct.SC ) return 1;
-		return 0;
-	}
-
-	for (x = 0; x <  matriz_struct.total_zeros;x++){
-
-		if (solucao.matriz_sol[x][2] == 0){
-			L = solucao.matriz_sol[x][0];
-			C = solucao.matriz_sol[x][1];
-			max_gap = find_gap_value(L,C);
-		    for  (guess = 1; guess <= max_gap ; guess++) {
-		        matriz_struct.matriz[L][C] = guess;
-		        solucao.matriz_sol[x][2] = guess;
-		        // ? verif zero alone
-		        if(solve_zero(matriz_struct.matriz[L][C]) && valid()) {
-		            return 1;
-		        }
-		    	matriz_struct.matriz[L][C] = 0;
-		    	solucao.matriz_sol[x][2] = 0;
-		    }
-		}
-	}
     
+	if (find_next_zero(&L, &C)){
+		max_gap = find_gap_value(L,C);
+	}		
+		    for  (guess = 1; guess < max_gap ; guess++) {
+		       
+			    matriz_struct.matriz[L][C] = guess;
+		       
+		        if(check_valid()) return 1;
+		        
+				else if (guess ==  max_gap-1)return 0; 
+				
+				if(solve_zero() ) return 1;
+		         
+		    	matriz_struct.matriz[L][C] = 0;
+		    }	    
     return 0;
 }
 
-
-
-
-
-
-
-
-
+void update_sol(){
+	int i, L ,C;
+    for ( i=0; i < matriz_struct.total_zeros; i++){
+       if(solucao.matriz_sol[i][2]==0 ) {
+       		L = solucao.matriz_sol[i][0]-1;
+       		C = solucao.matriz_sol[i][1]-1;
+       		solucao.matriz_sol[i][2] = matriz_struct.matriz[L][C];
+	  	 }
+   }
+	
+}
 
 int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
     int x, somaLinha = -1, somaColuna = -1; // -1 para não ser contado o 0 que estamos a resolver
