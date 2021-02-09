@@ -1,5 +1,5 @@
 #include "main.h"
-
+// falta defenir a condição de problema imposssivel output deve ser apenas uma linha com 3 0 espaçados
 void ler_ficheiro(char *prog){
     FILE *fPointer;
     int i,j, **matrix, total_zero_counter =0;
@@ -234,7 +234,17 @@ void update_sol(){
    }
 	
 }
-
+/*
+void create_outputfile(){
+	char * cptr;
+	int dot = '.';
+	FILE *fPointer;
+	ptr = strchr(argv[1], dot);
+	
+	fPointer = (FILE *) fopen(prog, "w"); // usar nome do file inicial mudar a partir do . para sol 
+	
+}
+*/
 int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
     int x, somaLinha = -1, somaColuna = -1; // -1 para não ser contado o 0 que estamos a resolver
 
