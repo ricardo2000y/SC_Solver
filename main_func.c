@@ -86,7 +86,7 @@ void verif_zero_alone() {
 	//L,C = i,j
 
     //na linha 0, quero avan�ar de coluna a coluna � procura de 0's, se n encontrar ent incrementa a linha
-	do{	
+	do{
 		alone_z_counter = 0;
 	 	//a correr a linha
 		for (i = 0; i < matriz_struct.L; i++, z_counter = 0) {
@@ -123,7 +123,7 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 
     int somaLinha = 0, somaColuna = 0, sol_linha = 0, sol_coluna = 0,x;
 
-	
+
 	if (tipo_de_varramento == 0 /*leitura por linha*/) {
 		for (x = 0; x < matriz_struct.C; x++) {
 			somaLinha = somaLinha + matriz_struct.matriz[i][x];
@@ -138,17 +138,16 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 		}
 		sol_coluna = matriz_struct.SC - somaColuna;
 		matriz_struct.matriz[i][j] = sol_coluna;
-
-
 	}
-    update_sol();
 }
 
 
 void printSol() {
     int i, j, print_until;
     printf("\n");
-    print_until= matriz_struct.total_zeros;
+    if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0){
+        print_until=1;
+    }else print_until= matriz_struct.total_zeros;
     for (i = 0;i < print_until;i++) {
         for (j = 0;j < 3;j++) {
             printf("%d\t", solucao.matriz_sol[i][j]);
@@ -163,14 +162,14 @@ void aviso(char *prog){
 }
 
 int find_next_zero(int* L , int* C){
-	int i,j;	
+	int i,j;
 	for (i = 0; i < matriz_struct.L; i++) {
 			for (j = 0; j < matriz_struct.C;j++) {
 				if (matriz_struct.matriz[i][j] == 0){
 					*L = i;
 					*C = j;
 					return 1;
-					} 
+					}
 				}
 			}
 	return 0;
@@ -213,17 +212,11 @@ int solve_zero() {
 	    else if(check_valid())return 1;
 
 		    for  (guess = 1; guess <= max_gap ; guess++) {
-		       
-			    matriz_struct.matriz[L][C] = guess;
-		       
 
-		        
-				/*else if (guess ==  max_gap-1){
-                    return 0;
-				}*/
-				
+			    matriz_struct.matriz[L][C] = guess;
+
 				if(solve_zero() ) return 1;
-		         
+
 		    	matriz_struct.matriz[L][C] = 0;
 		    }
 
@@ -240,7 +233,7 @@ void update_sol(){
 	  	 }
        //qnd h ha sol temos de meter 000
    }
-	
+
 }
 
 int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
@@ -260,6 +253,49 @@ int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
     somaColuna = matriz_struct.SC - somaColuna;
     if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores m�ximos linha/coluna
     else return somaColuna;
+}
+
+void free_mem(){
+    printf("\nFree da memoria");
+    free(matriz_struct.matriz);
+    free(solucao.matriz_sol);
+}
+
+void save_to_file (char *prog){
+    printf("\n IM IN SAVE TO FILE");
+    int i, j, print_until;
+    FILE *fp;
+    int len = strlen(prog)-3;
+    char dest[len+3];
+    char sol[] = "sol";
+
+    if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0){
+        print_until=1;
+    }else print_until= matriz_struct.total_zeros;
+
+
+
+
+
+
+
+
+    strncpy(dest, prog,len);
+    strcat(dest, sol);
+    fp = fopen(dest, "w");
+    printf("\n%s", dest);
+    if(fp == NULL)
+    {
+        printf("\nError!");
+        exit(1);
+    }
+    for(i=0; i<print_until; i++){
+        for(j=0; j<3; j++){
+            fprintf(fp,"%d ",solucao.matriz_sol[i][j]);
+        }
+        fprintf(fp, "\n");
+    }
+    fclose(fp);
 }
 
 

@@ -56,3 +56,5 @@ int solve_zero();
 int find_next_zero(int*, int*);
 int check_valid();
 void update_sol();/*le a matriz da solu��o para encontrar a coordenada do zero e guardar o resultado no respetivo sitio*/
+void free_mem();
+void save_to_file(char *);
