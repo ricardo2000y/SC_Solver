@@ -26,10 +26,10 @@ output solucao;
 
 void ler_ficheiro(char*);
     /* abre ficheiro .prb
-     * guarda as informações necessárias ao programa na estrutura puzzle matriz_strcut
+     * guarda as informaï¿½ï¿½es necessï¿½rias ao programa na estrutura puzzle matriz_strcut
         * L, C, SL, SC, zeros totais guardados
      * aloca memoria para a matriz lida segundo as suas linhas e colunas
-        * matriz é guardada
+        * matriz ï¿½ guardada
      * fecha file.*/
 void aviso(char *);
 void setup_solucao();
@@ -39,7 +39,7 @@ void setup_solucao();
 void printMatriz(); //self-explanatory
 
 void printSol();
-    /* imprime as solucoes que já tem resolvidas
+    /* imprime as solucoes que jï¿½ tem resolvidas
      * se nao tiver TODAS as solucoes resolvidas informa o utilizador*/
 
 void verif_zero_alone();
@@ -50,11 +50,9 @@ void verif_zero_alone();
     */
 void solve_zero_alone(int,int,int);
     /*soma as linhas/colunas para e subrai a SL/SC para encontrar o 0*/
-void save_result(int, int , int );
-    /*le a matriz da solução para encontrar a coordenada do zero e guardar o resultado no respetivo sitio*/
 
 int find_gap_value(int, int);
 int solve_zero();
 int find_next_zero(int*, int*);
 int check_valid();
-void update_sol();
+void update_sol();/*le a matriz da soluï¿½ï¿½o para encontrar a coordenada do zero e guardar o resultado no respetivo sitio*/

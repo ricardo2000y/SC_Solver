@@ -15,14 +15,24 @@ int main(int argc, char *argv[]){
     printMatriz();
 
     verif_zero_alone();
-    
-	solve_zero();
+    if(check_valid()){
+        update_sol();
+        printSol();
+        exit(1);
+    }else if (!solve_zero()){
+
+
+	    solucao.matriz_sol[0][0] = 0;
+        solucao.matriz_sol[0][1] = 0;
+        solucao.matriz_sol[0][2] = 0;
+	};
 	
 	update_sol();
 
 	printSol();
- 
-    //funcao da arvore troço q vai resolver os outros 0's :D();
+
+
+    //funcao da arvore troï¿½o q vai resolver os outros 0's :D();
     //sort_sol();
     //guardar_file_sol();
     return 0;
