@@ -276,7 +276,6 @@ void free_mem(){
 		free(solucao.matriz_sol[i]);
 	}
     free(solucao.matriz_sol);
-    
     return;
 }
 
@@ -284,9 +283,9 @@ void save_to_file (char *prog){
     int i, j, print_until;
     FILE *fp;
     int len = strlen(prog);
+    char* dest= strdup(prog);
     char sol[3] = "sol";
-    char * dest;
-	dest = (char*)malloc(len);
+	memset (dest,'\0',len);
     if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0) print_until=1;
     else print_until= matriz_struct.total_zeros;
 
@@ -304,7 +303,6 @@ void save_to_file (char *prog){
         fprintf(fp, "\n");
     }
     fclose(fp);
-    free(dest);
 	return;
 }
 
