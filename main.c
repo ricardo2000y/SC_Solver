@@ -1,6 +1,6 @@
 
 #include "main.h"
-#include <sys/time.h>
+
 int main(int argc, char *argv[]){
     if (argc < 2) {
         aviso(argv[0]);
