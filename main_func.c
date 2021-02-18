@@ -279,6 +279,13 @@ void free_mem(){
     return;
 }
 
+char *strdup(const char *src) {
+    char *dst = malloc(strlen (src) + 1);  /* funcao dava erro por nao estar declarada*/
+    if (dst == NULL) return NULL;          
+    strcpy(dst, src);                      
+    return dst;                            
+}
+
 void save_to_file (char *prog){
     int i, j, print_until;
     FILE *fp;
