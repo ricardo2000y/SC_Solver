@@ -13,15 +13,13 @@ typedef struct {/*  estrutura com dados do problema */
 	int total_zeros;/* usado para fazer a estrutura da solucao e para guardar a mesma no ficheiro*/
 }puzzle;
 
-typedef struct{/*  estrutura com a solucao do problema no formato pedido*/
-	int **matriz_sol;/*matriz(array de arrays) que e prenchido com a coordenada do zero resolvido e o seu valor*/
-    int L;
-	int C;
-	int result;
-}output;
+
+int **matriz_sol;/*matriz(array de arrays) que e prenchido com a coordenada do zero resolvido e o seu valor*/
+   
+
 
 puzzle matriz_struct;
-output solucao;
+
 
 void ler_ficheiro(char*);
     /* abre ficheiro .prb

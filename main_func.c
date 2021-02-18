@@ -51,17 +51,17 @@ void ler_ficheiro(char *prog){
 void setup_solucao(){
     int x=0 ,i, j;
         /*ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUCAO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS*/
-    solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); /* alocar L linhas*/
+    matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); /* alocar L linhas*/
     for (i = 0;i < matriz_struct.total_zeros;i++) {
-        solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); /*alocar 3 colunas para cada linha (L) [L][C][sol]*/
+        matriz_sol[i] = (int*)malloc(sizeof(int) * 3); /*alocar 3 colunas para cada linha (L) [L][C][sol]*/
     }
 
     for (i = 0;i < matriz_struct.L;i++) {
         for (j = 0;j < matriz_struct.C;j++) {
             if(matriz_struct.matriz[i][j] == 0){
-                solucao.matriz_sol[x][0] = i+1;
-                solucao.matriz_sol[x][1] = j+1;
-                solucao.matriz_sol[x][2] = 0;
+                matriz_sol[x][0] = i+1;
+                matriz_sol[x][1] = j+1;
+                matriz_sol[x][2] = 0;
                 x++;
             }
         }
@@ -153,14 +153,14 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 
 void not_solvable(){
 	int i=0;
-    free(solucao.matriz_sol);
-    solucao.matriz_sol = (int**)malloc(sizeof(int*) * 1);
+    free(matriz_sol);
+    matriz_sol = (int**)malloc(sizeof(int*) * 1);
     for(i=0; i<4; i++){
-        solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3);
+        matriz_sol[i] = (int*)malloc(sizeof(int) * 3);
     }
-	solucao.matriz_sol[0][0] = 0;
-    solucao.matriz_sol[0][1] = 0;
-    solucao.matriz_sol[0][2] = 0;
+	matriz_sol[0][0] = 0;
+    matriz_sol[0][1] = 0;
+    matriz_sol[0][2] = 0;
     return;
 }
 
@@ -239,10 +239,10 @@ int solve_zero() {
 void update_sol(){
 	int i, L ,C;
     for ( i=0; i < matriz_struct.total_zeros; i++){
-       if(solucao.matriz_sol[i][2]==0 ) {
-       		L = solucao.matriz_sol[i][0]-1;
-       		C = solucao.matriz_sol[i][1]-1;
-       		solucao.matriz_sol[i][2] = matriz_struct.matriz[L][C];
+       if(matriz_sol[i][2]==0 ) {
+       		L = matriz_sol[i][0]-1;
+       		C = matriz_sol[i][1]-1;
+       		matriz_sol[i][2] = matriz_struct.matriz[L][C];
 	   }    
    }
 	return;
@@ -273,9 +273,9 @@ void free_mem(){
 	}
     free(matriz_struct.matriz);
     for(i=0; i<matriz_struct.total_zeros; i++){
-		free(solucao.matriz_sol[i]);
+		free(matriz_sol[i]);
 	}
-    free(solucao.matriz_sol);
+    free(matriz_sol);
     return;
 }
 
@@ -286,7 +286,7 @@ void save_to_file (char *prog){
     char* dest= strdup(prog);
     char sol[3] = "sol";
 	memset (dest,'\0',len);
-    if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0) print_until=1;
+    if(matriz_sol[0][0] == 0 && matriz_sol[0][1] == 0 && matriz_sol[0][2] == 0) print_until=1;
     else print_until= matriz_struct.total_zeros;
 
     strncpy(dest, prog,len-3);
@@ -298,7 +298,7 @@ void save_to_file (char *prog){
     }
     for(i=0; i<print_until; i++){
         for(j=0; j<3; j++){
-            fprintf(fp,"%d ",solucao.matriz_sol[i][j]);
+            fprintf(fp,"%d ",matriz_sol[i][j]);
         }
         fprintf(fp, "\n");
     }
