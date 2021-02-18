@@ -1,10 +1,10 @@
 #include "main.h"
-// falta defenir a condiï¿½ï¿½o de problema imposssivel output deve ser apenas uma linha com 3 0 espaï¿½ados
+
 void ler_ficheiro(char *prog){
     FILE *fPointer;
     int i,j, **matrix, total_zero_counter =0;
 
-    /* open file and read array size */
+    /* abre o ficheiro  */
     fPointer = (FILE *) fopen(prog, "r");
     if (fPointer == (FILE *) NULL) {
         fprintf(stderr, "O ficheiro %s nao pode ser lido ou nao existe.  Tente novamente.\n", prog);
@@ -26,7 +26,6 @@ void ler_ficheiro(char *prog){
         matriz_struct.matriz[i] = (int*)malloc(sizeof(int) * matriz_struct.C); //alocar C colunas para cada linha (L)
     }
 
-    printf("L = %d\nC = %d\nSL= %d\nSC = %d\n", matriz_struct.L, matriz_struct.C, matriz_struct.SL, matriz_struct.SC);
     for ( i = 0; i < matriz_struct.L;i++) {
         for ( j = 0; j < matriz_struct.C; j++) {
             fscanf(fPointer, "%s", fileInfo);
@@ -42,15 +41,16 @@ void ler_ficheiro(char *prog){
     matriz_struct.total_zeros=total_zero_counter;
 
     fclose(fPointer);
+    return;
 }
 
 void setup_solucao(){
     int x = 0, i, j;
-        //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUï¿½ï¿½O - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
-        solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
-        for (i = 0;i < matriz_struct.total_zeros;i++) {
-            solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
-        }
+        //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUCAO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
+    solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
+    for (i = 0;i < matriz_struct.total_zeros;i++) {
+        solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
+    }
 
     for (i = 0;i < matriz_struct.L;i++) {
         for (j = 0;j < matriz_struct.C;j++) {
@@ -62,41 +62,31 @@ void setup_solucao(){
             }
         }
     }
-
+	return;
 }
 
-void printMatriz() {// apagar antes de entregar 
-	int i, j;
-	printf("\n");
-	for (i = 0;i < matriz_struct.L;i++) {
-		for (j = 0;j < matriz_struct.C;j++) {
-			printf("%d\t", matriz_struct.matriz[i][j]);
-		}
-		printf("\n");
-	}
-}
 
 void verif_zero_alone() {
-
+	
     int zero_location,j,i,alone_z_counter, z_counter=0,total_zero_counter=0;
-	//--DESCRIï¿½ï¿½O DAS VARIAVEIS--
+	//--DESCRICAO DAS VARIAVEIS--
 	// zero_location: vai guardar as "coordenadas" do 0 [i][j]
 	// alone_z_counter: incrementa se existirem 0's sozinhos
 	// z_counter: serve para contar o nr de 0's de uma coluna ou linha
 	//L,C = i,j
 
-    //na linha 0, quero avanï¿½ar de coluna a coluna ï¿½ procura de 0's, se n encontrar ent incrementa a linha
+    //na linha 0, quero avancar de coluna a coluna a procura de 0's, se n encontrar ent incrementa a linha
 	do{
 		alone_z_counter = 0;
 	 	//a correr a linha
 		for (i = 0; i < matriz_struct.L; i++, z_counter = 0) {
 			for (j = 0; j < matriz_struct.C;j++) {
 				if (matriz_struct.matriz[i][j] == 0) {
-					z_counter++;        //se X na posiï¿½ï¿½o [i][j]=0 incrementa
-					zero_location = j;  //posiï¿½ï¿½o do 0 => [i][zero_location]
+					z_counter++;        //se X na posicao [i][j]=0 incrementa
+					zero_location = j;  //posicao do 0 => [i][zero_location]
 				}
 				if (j == (matriz_struct.C - 1) && z_counter == 1){//se chegar ao fim da linha e existir apenas um 0
-                                                                  //chama a funï¿½ï¿½o q resolve o 0 sozinho
+                                                                  //chama a funcao q resolve o 0 sozinho
 					solve_zero_alone(i, zero_location,0);
 					alone_z_counter++;
 				}
@@ -115,8 +105,9 @@ void verif_zero_alone() {
 					alone_z_counter++;
 				}
 			}
-	}
+		}
 	} while (alone_z_counter!=0 );
+	return;
 }
 
 void solve_zero_alone(int i, int j, int tipo_de_varramento) {
@@ -139,22 +130,22 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 		sol_coluna = matriz_struct.SC - somaColuna;
 		matriz_struct.matriz[i][j] = sol_coluna;
 	}
+	return;
 }
 
-
-void printSol() {// apagar antes de enviar
-    int i, j, print_until;
-    printf("\n");
-    if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0){
-        print_until=1;
-    }else print_until= matriz_struct.total_zeros;
-    for (i = 0;i < print_until;i++) {
-        for (j = 0;j < 3;j++) {
-            printf("%d\t", solucao.matriz_sol[i][j]);
-        }
-        printf("\n");
+void not_solvable(){
+	int i=0;
+    free(solucao.matriz_sol);
+    solucao.matriz_sol = (int**)malloc(sizeof(int*) * 1);
+    for(i=0; i<4; i++){
+        solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3);
     }
+	solucao.matriz_sol[0][0] = 0;
+    solucao.matriz_sol[0][1] = 0;
+    solucao.matriz_sol[0][2] = 0;
+    return;
 }
+
 
 void aviso(char *prog){
     fprintf(stdout, "aviso:deve inserir %s nome_de_ficheiro e nao apenas %s\n", prog, prog);
@@ -164,15 +155,15 @@ void aviso(char *prog){
 int find_next_zero(int* L , int* C){
 	int i,j;
 	for (i = 0; i < matriz_struct.L; i++) {
-			for (j = 0; j < matriz_struct.C;j++) {
-				if (matriz_struct.matriz[i][j] == 0){
-					*L = i;
-					*C = j;
-					return 1;
-					}
-				}
-				
+		for (j = 0; j < matriz_struct.C;j++) {
+			if (matriz_struct.matriz[i][j] == 0){
+				*L = i;
+				*C = j;
+				return 1;
 			}
+		}
+				
+	}
 	return 0;
 }
 
@@ -187,80 +178,52 @@ int check_valid(){
 
         if(check_soma_coluna != matriz_struct.SC) return 0;
     }
-	/*for (L = 0 ; L < matriz_struct.L ; L++){
+	/*for (L = 0 ; L < matriz_struct.L ; L++){---------------------------------------------------------------------------------------
 	    check_soma_linha = 0;
 		for (C = 0 ; C < matriz_struct.C; C++){
             check_soma_linha += matriz_struct.matriz[L][C];
 			}
 			if(check_soma_linha != matriz_struct.SL) return 0;
 		}*/
-    //printMatriz();//-----------------------------------------apagar antes de enviar
+    //printMatriz();//-----------------------------------------apagar antes de enviar--------------------------------------------------------
     return 1;
 }
 
-int valid_value(int L, int C){
-	
-    int check_soma_linha = 0 ,check_soma_coluna = 0, x;
-	printf("i made it");
-	 
-		for (x = 0; x < matriz_struct.C; x++) {
-			check_soma_linha +=  matriz_struct.matriz[L][x];
-		}
-		printf("%d    %d",check_soma_linha, matriz_struct.SL);
-		if(check_soma_linha != matriz_struct.SL) return 0;
-	printf("i made it 2");	
-		for (x = 0; x < matriz_struct.L; x++) {
-			check_soma_coluna +=  matriz_struct.matriz[x][C];
-		}
-		if(check_soma_coluna != matriz_struct.SC) return 0;
-	printf("i made it 3");
-
-	return 1;
-}
 
 int alone(int L, int C){
 	int x, zero_counter=0;
 	for (x = 0; x < matriz_struct.C; x++) {
-			if(  matriz_struct.matriz[L][x]==0) zero_counter++;
-		}
-		if (zero_counter == 1) {
-			return 1;
-			}
+		if(  matriz_struct.matriz[L][x]==0) zero_counter++;
+	}
+	if (zero_counter == 1) return 1;
 	zero_counter=0;
 	for (x = 0; x < matriz_struct.L; x++) {
 			if(  matriz_struct.matriz[x][C]==0) zero_counter++;
-		}
-	if (zero_counter == 1){
-		return 1;
-		}
+	}
+	if (zero_counter == 1)return 1;
 	return 0;
 }
 
 int solve_zero() {
-    // L,C vem das matriz das solucoes
+    
     int L,C, max_gap=0,x,guess;
-    // condicao que verifica se ja estamos na ultima posicao e
-    // somas constantes estï¿½o verificadas
-    //printMatriz();
-	if (find_next_zero(&L, &C)){
+    // condicao que verifica se ja estamos na ultima posicao eblema imposssivel output
+    // somas constantes estao verificadas
+    
+	if (find_next_zero(&L, &C)){//descobre o proximo zero e devolve atraves do seu endereco
 		max_gap = find_gap_value(L,C);
-		
 	}
 	else if(check_valid())return 1;
 		
 	else return 0;
 
-		for  (guess = 1; guess <= max_gap ; ) {
-			
-			if(alone(L,C)) guess = max_gap;
-			matriz_struct.matriz[L][C] = guess;
-			++guess;
-			//if(!valid_value(L,C);	 tenho q arranjar maneira de meter esta treta algures -
-			if (solve_zero()) return 1;
-				
-			matriz_struct.matriz[L][C] = 0;
-		    }
-
+	for  (guess = 1; guess <= max_gap ; ) {		
+		if(alone(L,C)) guess = max_gap; // caso esteja sozinho o max_gap é o unico valor que garante que a matriz tem soma constante na linha em questao
+		matriz_struct.matriz[L][C] = guess;
+		++guess;		
+		if (solve_zero()) return 1;
+		matriz_struct.matriz[L][C] = 0;
+	}
     return 0;
 }
 
@@ -271,10 +234,9 @@ void update_sol(){
        		L = solucao.matriz_sol[i][0]-1;
        		C = solucao.matriz_sol[i][1]-1;
        		solucao.matriz_sol[i][2] = matriz_struct.matriz[L][C];
-	  	 }
-       
+	   }    
    }
-
+	return;
 }
 
 int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
@@ -289,7 +251,6 @@ int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
         if (matriz_struct.matriz[x][C]==0) somaColuna++;
         somaColuna += matriz_struct.matriz[x][C];
     }
-
     somaLinha = matriz_struct.SL - somaLinha;
     somaColuna = matriz_struct.SC - somaColuna;
     if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores maximos linha/coluna
@@ -297,29 +258,25 @@ int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
 }
 
 void free_mem(){
-    printf("\nFree da memoria");
     free(matriz_struct.matriz);
     free(solucao.matriz_sol);
+    return;
 }
 
 void save_to_file (char *prog){
-    printf("\n IM IN SAVE TO FILE");
     int i, j, print_until;
     FILE *fp;
     int len = strlen(prog)-3;
     char dest[len+3];
     char sol[] = "sol";
 
-    if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0){
-        print_until=1;
-    }else print_until= matriz_struct.total_zeros;
+    if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0) print_until=1;
+    else print_until= matriz_struct.total_zeros;
 
     strncpy(dest, prog,len);
     strcat(dest, sol);
     fp = fopen(dest, "w");
-    printf("\n%s", dest);
-    if(fp == NULL)
-    {
+    if(fp == NULL){
         printf("\nError!");
         exit(1);
     }
@@ -330,6 +287,7 @@ void save_to_file (char *prog){
         fprintf(fp, "\n");
     }
     fclose(fp);
+	return;
 }
 
 

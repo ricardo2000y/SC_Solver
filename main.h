@@ -1,5 +1,5 @@
-//#define _CRT_SECURE_NO_DEPRECATE  //uso o IDE Visual Studio 2019
-/*It looks like Microsoft has deprecated lots of calls which use buffers to improve code security. However, the solutions they're providing aren't portable. Anyway, if you aren't interested in using the secure version of their calls (like fopen_s), you need to place a definition of _CRT_SECURE_NO_DEPRECATE before your included header files.*/
+
+// falta adicionar descricoes a quase tudo aqui
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +18,6 @@ typedef struct{
     int L;
 	int C;
 	int result;
-	int zero_solved;
 }output;
 
 puzzle matriz_struct;
@@ -36,11 +35,8 @@ void setup_solucao();
     /*Aloca memoria para uma matriz onde vao ser guardadas
      as solucoes, segundo o numero de zeros totais da matriz problema*/
 
-void printMatriz(); //self-explanatory
 
-void printSol();
-    /* imprime as solucoes que j� tem resolvidas
-     * se nao tiver TODAS as solucoes resolvidas informa o utilizador*/
+
 
 void verif_zero_alone();
     /*conta os zeros por linha
@@ -50,12 +46,14 @@ void verif_zero_alone();
     */
 void solve_zero_alone(int,int,int);
     /*soma as linhas/colunas para e subrai a SL/SC para encontrar o 0*/
-int valid_value(int , int );
 int alone(int,int);
 int find_gap_value(int, int);
 int solve_zero();
 int find_next_zero(int*, int*);
 int check_valid();
-void update_sol();/*le a matriz da solu��o para encontrar a coordenada do zero e guardar o resultado no respetivo sitio*/
+void update_sol();/*le a matriz da solucao para encontrar a coordenada do zero e guardar o resultado no respetivo sitio*/
 void free_mem();
 void save_to_file(char *);
+
+
+void not_solvable();
