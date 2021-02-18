@@ -65,7 +65,7 @@ void setup_solucao(){
 
 }
 
-void printMatriz() {
+void printMatriz() {// apagar antes de entregar 
 	int i, j;
 	printf("\n");
 	for (i = 0;i < matriz_struct.L;i++) {
@@ -142,7 +142,7 @@ void solve_zero_alone(int i, int j, int tipo_de_varramento) {
 }
 
 
-void printSol() {
+void printSol() {// apagar antes de enviar
     int i, j, print_until;
     printf("\n");
     if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0){
@@ -171,13 +171,13 @@ int find_next_zero(int* L , int* C){
 					return 1;
 					}
 				}
+				
 			}
 	return 0;
 }
 
 int check_valid(){
-    //printMatriz();
-	int L=0,C=0,check_soma_linha = 0 ,check_soma_coluna = 0;
+	int L=0,C=0 ,check_soma_coluna = 0;
     for (C = 0 ; C < matriz_struct.C ; C++){
         check_soma_coluna = 0;
         for (L = 0 ; L < matriz_struct.L; L++){
@@ -185,19 +185,55 @@ int check_valid(){
 
         }
 
-        //printf("\nmatriz_struct.SC %d\n check_soma_coluna = %d", matriz_struct.SC, check_soma_coluna);
         if(check_soma_coluna != matriz_struct.SC) return 0;
     }
-	for (L = 0 ; L < matriz_struct.L ; L++){
+	/*for (L = 0 ; L < matriz_struct.L ; L++){
 	    check_soma_linha = 0;
 		for (C = 0 ; C < matriz_struct.C; C++){
             check_soma_linha += matriz_struct.matriz[L][C];
 			}
-        //printf("\nmatriz_struct.SL %d\n check_soma_linha = %d", matriz_struct.SL, check_soma_linha);
 			if(check_soma_linha != matriz_struct.SL) return 0;
+		}*/
+    //printMatriz();//-----------------------------------------apagar antes de enviar
+    return 1;
+}
+
+int valid_value(int L, int C){
+	
+    int check_soma_linha = 0 ,check_soma_coluna = 0, x;
+	printf("i made it");
+	 
+		for (x = 0; x < matriz_struct.C; x++) {
+			check_soma_linha +=  matriz_struct.matriz[L][x];
 		}
-    printMatriz();
+		printf("%d    %d",check_soma_linha, matriz_struct.SL);
+		if(check_soma_linha != matriz_struct.SL) return 0;
+	printf("i made it 2");	
+		for (x = 0; x < matriz_struct.L; x++) {
+			check_soma_coluna +=  matriz_struct.matriz[x][C];
+		}
+		if(check_soma_coluna != matriz_struct.SC) return 0;
+	printf("i made it 3");
+
 	return 1;
+}
+
+int alone(int L, int C){
+	int x, zero_counter=0;
+	for (x = 0; x < matriz_struct.C; x++) {
+			if(  matriz_struct.matriz[L][x]==0) zero_counter++;
+		}
+		if (zero_counter == 1) {
+			return 1;
+			}
+	zero_counter=0;
+	for (x = 0; x < matriz_struct.L; x++) {
+			if(  matriz_struct.matriz[x][C]==0) zero_counter++;
+		}
+	if (zero_counter == 1){
+		return 1;
+		}
+	return 0;
 }
 
 int solve_zero() {
@@ -208,16 +244,21 @@ int solve_zero() {
     //printMatriz();
 	if (find_next_zero(&L, &C)){
 		max_gap = find_gap_value(L,C);
+		
 	}
-	    else if(check_valid())return 1;
+	else if(check_valid())return 1;
+		
+	else return 0;
 
-		    for  (guess = 1; guess <= max_gap ; guess++) {
-
-			    matriz_struct.matriz[L][C] = guess;
-
-				if(solve_zero() ) return 1;
-
-		    	matriz_struct.matriz[L][C] = 0;
+		for  (guess = 1; guess <= max_gap ; ) {
+			
+			if(alone(L,C)) guess = max_gap;
+			matriz_struct.matriz[L][C] = guess;
+			++guess;
+			//if(!valid_value(L,C);	 tenho q arranjar maneira de meter esta treta algures -
+			if (solve_zero()) return 1;
+				
+			matriz_struct.matriz[L][C] = 0;
 		    }
 
     return 0;
@@ -231,17 +272,17 @@ void update_sol(){
        		C = solucao.matriz_sol[i][1]-1;
        		solucao.matriz_sol[i][2] = matriz_struct.matriz[L][C];
 	  	 }
-       //qnd h ha sol temos de meter 000
+       
    }
 
 }
 
 int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
-    int x, somaLinha = -1, somaColuna = -1; // -1 para n�o ser contado o 0 que estamos a resolver
+    int x, somaLinha = -1, somaColuna = -1; // -1 para nao ser contado o 0 que estamos a resolver
 
     for (x = 0; x < matriz_struct.C; x++) {
         if (matriz_struct.matriz[L][x]==0) somaLinha++; //por cada 0 que encontra incrementa somaLinha por 1
-                                                        //pq o valor minimo de qualquer 0 (pos resolucao) � 1
+                                                        //pq o valor minimo de qualquer 0 (pos resolucao) = 1
         somaLinha += matriz_struct.matriz[L][x];
     }
     for (x = 0; x < matriz_struct.L; x++) {
@@ -251,7 +292,7 @@ int find_gap_value( int L, int C){/*recebe a as coordenadas do zero */
 
     somaLinha = matriz_struct.SL - somaLinha;
     somaColuna = matriz_struct.SC - somaColuna;
-    if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores m�ximos linha/coluna
+    if (somaLinha < somaColuna ) return somaLinha ;  // retorna o menor entre os valores maximos linha/coluna
     else return somaColuna;
 }
 
@@ -272,13 +313,6 @@ void save_to_file (char *prog){
     if(solucao.matriz_sol[0][0] == 0 && solucao.matriz_sol[0][1] == 0 && solucao.matriz_sol[0][2] == 0){
         print_until=1;
     }else print_until= matriz_struct.total_zeros;
-
-
-
-
-
-
-
 
     strncpy(dest, prog,len);
     strcat(dest, sol);

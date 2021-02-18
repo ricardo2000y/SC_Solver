@@ -50,7 +50,8 @@ void verif_zero_alone();
     */
 void solve_zero_alone(int,int,int);
     /*soma as linhas/colunas para e subrai a SL/SC para encontrar o 0*/
-
+int valid_value(int , int );
+int alone(int,int);
 int find_gap_value(int, int);
 int solve_zero();
 int find_next_zero(int*, int*);
