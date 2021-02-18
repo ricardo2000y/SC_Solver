@@ -21,7 +21,7 @@ void ler_ficheiro(char *prog){
     matriz_struct.SL = atoi(fileInfo);
     fscanf(fPointer, "%s", fileInfo);
     matriz_struct.SC = atoi(fileInfo);
-    matriz_struct.matriz = (int**)malloc(sizeof(int*) * matriz_struct.L); // alocar L linhas
+    matriz_struct.matriz = (int**)malloc(sizeof(int*) * matriz_struct.L-1); // alocar L linhas
     for (i = 0;i < matriz_struct.L;i++) {
         matriz_struct.matriz[i] = (int*)malloc(sizeof(int) * matriz_struct.C); //alocar C colunas para cada linha (L)
     }
@@ -47,7 +47,7 @@ void ler_ficheiro(char *prog){
 void setup_solucao(){
     int x = 0, i, j;
         //ALOCAR MEMORIA PARA A ESTRUTURA DA SOLUCAO - 3 COLUNAS , NR DE LINHAS = 0'S TOTAIS
-    solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros); // alocar L linhas
+    solucao.matriz_sol = (int**)malloc(sizeof(int*) * matriz_struct.total_zeros-1); // alocar L linhas
     for (i = 0;i < matriz_struct.total_zeros;i++) {
         solucao.matriz_sol[i] = (int*)malloc(sizeof(int) * 3); //alocar 3 colunas para cada linha (L) [L][C][sol]
     }
@@ -178,14 +178,6 @@ int check_valid(){
 
         if(check_soma_coluna != matriz_struct.SC) return 0;
     }
-	/*for (L = 0 ; L < matriz_struct.L ; L++){---------------------------------------------------------------------------------------
-	    check_soma_linha = 0;
-		for (C = 0 ; C < matriz_struct.C; C++){
-            check_soma_linha += matriz_struct.matriz[L][C];
-			}
-			if(check_soma_linha != matriz_struct.SL) return 0;
-		}*/
-    //printMatriz();//-----------------------------------------apagar antes de enviar--------------------------------------------------------
     return 1;
 }
 
@@ -217,10 +209,9 @@ int solve_zero() {
 		
 	else return 0;
 
-	for  (guess = 1; guess <= max_gap ; ) {		
+	for  (guess = 1; guess <= max_gap ; ++guess) {		
 		if(alone(L,C)) guess = max_gap; // caso esteja sozinho o max_gap é o unico valor que garante que a matriz tem soma constante na linha em questao
-		matriz_struct.matriz[L][C] = guess;
-		++guess;		
+		matriz_struct.matriz[L][C] = guess;	
 		if (solve_zero()) return 1;
 		matriz_struct.matriz[L][C] = 0;
 	}
