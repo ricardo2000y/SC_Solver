@@ -64,6 +64,7 @@ void setup_solucao(){
                 matriz_sol[x][2] = 0;
                 x++;
             }
+            
         }
     }
 	return;
@@ -78,6 +79,7 @@ void check_if_empty(){/*se a matriz estiver completamente vazia preenche com o v
 				matriz_struct.matriz[i][j] = x;
 			}
 		}
+	
 	}
 	return;
 }
@@ -191,6 +193,7 @@ int check_valid(){
         check_soma_coluna = 0;
         for (L = 0 ; L < matriz_struct.L; L++){
             check_soma_coluna  += matriz_struct.matriz[L][C] ;
+            if (matriz_struct.matriz[L][C] <= 0 ) return 0;
 
         }
 
